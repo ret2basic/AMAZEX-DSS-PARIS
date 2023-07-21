@@ -32,10 +32,13 @@ contract MagicETH is ERC20("Magic insecure ETH", "mETH") {
      * @dev Burn Magic Ether
      */
     function burnFrom(address account, uint256 amount) public {
+        // @audit-issue allowance(address owner, address spender), `account` should be the owner
         uint256 currentAllowance = allowance(msg.sender, account);
         require(currentAllowance >= amount, "ERC20: insufficient allowance");
 
         // decrease allowance
+        // @audit We can first call `approve(account, type(uint256).max)` to grant `account` max allowance
+        // @audit Then call `burnFrom(account, 0)` to get a huge allowance on `account` in the line below
         _approve(account, msg.sender, currentAllowance - amount);
 
         // burn
