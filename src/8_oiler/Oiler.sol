@@ -49,6 +49,7 @@ contract Oiler is ERC20 {
     function deposit(uint256 _amount) public {
         token.transferFrom(msg.sender, address(this), _amount);
         users[msg.sender].collateral += _amount;
+        // @audit-issue Where is mint()?
 
         emit Deposited(msg.sender, _amount);
     }

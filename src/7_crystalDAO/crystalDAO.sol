@@ -67,7 +67,6 @@ contract DaoVaultImplementation is Initializable, EIP712Upgradeable {
     function initialize(address _owner) public initializer {
         // EIP712 init: name DaoWallet, version 1.0
         __EIP712_init("DaoWallet", "1.0");
-
         // postInit: set owner with gas optimizations
         assembly {
             sstore(0, _owner)
