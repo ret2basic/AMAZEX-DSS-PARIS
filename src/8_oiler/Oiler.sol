@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
+import "forge-std/Test.sol";
 import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
@@ -49,7 +50,7 @@ contract Oiler is ERC20 {
     function deposit(uint256 _amount) public {
         token.transferFrom(msg.sender, address(this), _amount);
         users[msg.sender].collateral += _amount;
-        // @audit-issue Where is mint()?
+        // @audit-issue Where is _mint()?
 
         emit Deposited(msg.sender, _amount);
     }
@@ -142,6 +143,8 @@ contract Oiler is ERC20 {
         uint256 positionHealth = healthFactor(_user) / 10 ** 18;
         require(positionHealth < LIQUIDATION_THRESHOLD, "Liquidate: User not underwater");
         uint256 repayment = users[_user].borrow * 5 / 100;
+        console.log("users[_user].borrow: ", users[_user].borrow);
+        console.log("repayment: ", repayment);
         _burn(msg.sender, repayment);
         users[_user].borrow -= repayment;
         uint256 totalCollateralAmount = users[_user].collateral;

